@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>BLO Dashboard</title>
+    <style>
+.highlight {
+    background-color: #d4edda !important;
+    transition: background-color 0.5s ease;
+}
+</style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+
+	<div class="card shadow p-4 mt-4">
+    <h5>Live Voting Statistics</h5>
+
+    <p>Total: <span id="total"></span></p>
+    <p>Voted: <span id="voted"></span></p>
+    <p>Not Voted: <span id="notVoted"></span></p>
+    <p>Voting %: <span id="percentage"></span>%</p>
+
+    <div class="progress">
+        <div id="progressBar"
+             class="progress-bar bg-success"
+             role="progressbar"
+             style="width:0%">
+        </div>
+    </div>
+</div>
+
+    <div class="d-flex justify-content-between">
+        <h3>BLO Dashboard - Booth <span th:text="${booth.boothId}"></span></h3>
+        <a href="/blo/logout" class="btn btn-danger">Logout</a>
+    </div>
+
+    <div class="card shadow p-4 mt-4">
+        <h5>Booth Information</h5>
+        <p>
+            Village: <span th:text="${booth.village}"></span><br>
+            City: <span th:text="${booth.city}"></span><br>
+            Constituency: <span th:text="${booth.constituency}"></span><br>
+            BLO Name: <span th:text="${booth.bloName}"></span><br>
+        </p>
+    </div>
+
+    <div class="mt-5">
+        <h4>Voter List</h4>
+
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="voter : ${voters}"
+    th:id="'voter-' + ${voter.voterId}">
+                <td th:text="${voter.voterName}"></td>
+                <td th:text="${voter.email}"></td>
+
+                <td>
+                    <span th:if="${voter.voted}" class="badge bg-success">Voted</span>
+                    <span th:unless="${voter.voted}" class="badge bg-danger">Not Voted</span>
+                </td>
+
+                <td>
+                    <form th:if="${!voter.voted}"
+                          th:action="@{'/blo/updateVote/' + ${voter.sno}}"
+                          method="post">
+                        <button class="btn btn-sm btn-primary">
+                            Mark as Voted
+                        </button>
+                    </form>
+
+                    <span th:if="${voter.voted}" class="text-muted">
+                        Already Updated
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    function loadLiveStats() {
+        fetch('/blo/liveStats')
+            .then(response => response.json())
+            .then(data => {
+
+                document.getElementById("total").innerText = data.total;
+                document.getElementById("voted").innerText = data.voted;
+                document.getElementById("notVoted").innerText = data.notVoted;
+
+                let percent = data.percentage.toFixed(2);
+                document.getElementById("percentage").innerText = percent;
+
+                let progressBar = document.getElementById("progressBar");
+                progressBar.style.width = percent + "%";
+                progressBar.innerText = percent + "%";
+            });
+    }
+
+    // Load immediately
+    loadLiveStats();
+
+    // Auto refresh every 10 seconds
+    setInterval(loadLiveStats, 10000);
+    
+
+    let previousVoted = [];
+
+    function checkNewVotes() {
+
+        fetch('/blo/votedList')
+            .then(response => response.json())
+            .then(currentVoted => {
+
+                currentVoted.forEach(id => {
+
+                    if (!previousVoted.includes(id)) {
+
+                        let row = document.getElementById("voter-" + id);
+
+                        if (row) {
+                            row.classList.add("highlight");
+
+                            setTimeout(() => {
+                                row.classList.remove("highlight");
+                            }, 5000);
+                        }
+                    }
+                });
+
+                previousVoted = currentVoted;
+            });
+    }
+
+    // Run every 5 seconds
+    setInterval(checkNewVotes, 5000);
+
+    // Initial load
+    checkNewVotes();
+
+</script>
+</body>
+</html>

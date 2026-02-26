@@ -1,6 +1,7 @@
 package com.Project.ElectNotify.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,6 @@ public interface VoterRepository extends JpaRepository<Voter, Long> {
     long countByBooth_BoothId(int boothId);
 
     long countByBooth_BoothIdAndVotedTrue(int boothId);
+    
+    Optional<Voter> findByVoterIdAndBooth_BoothId(Long voterId, int boothId);
 }

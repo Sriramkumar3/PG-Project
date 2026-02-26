@@ -31,17 +31,23 @@ public class Voter {
 	public void setSno(int sno) {
 		this.sno = sno;
 	}
-	public String getVoter_name() {
+	public String getVoterName() {
 		return voterName;
 	}
-	public void setVoter_name(String voter_name) {
-		this.voterName = voter_name;
+	public void setVoterName(String voterName) {
+		this.voterName = voterName;
 	}
-	public String getAadhar_no() {
+	public String getAadhaarNo() {
 		return aadhaarNo;
 	}
-	public void setAadhar_no(String aadhar_no) {
-		this.aadhaarNo = aadhar_no;
+	public void setAadhaarNo(String aadhaarNo) {
+		this.aadhaarNo = aadhaarNo;
+	}
+	public Long getVoterId() {
+		return voterId;
+	}
+	public void setVoterId(Long voterId) {
+		this.voterId = voterId;
 	}
 	public LocalDate getDob() {
 		return dob;
@@ -55,11 +61,11 @@ public class Voter {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPhone_number() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
-	public void setPhone_number(String phone_number) {
-		this.phoneNumber = phone_number;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	public boolean isVoted() {
 		return voted;
@@ -73,13 +79,6 @@ public class Voter {
 	public void setBooth(Booth booth) {
 		this.booth = booth;
 	}
-	public Long getVoter_id() {
-		return voterId;
-	}
-	public void setVoter_id(Long voter_id) {
-		this.voterId = voter_id;
-	}
-	
 	
 	
 }
