@@ -1,28 +1,24 @@
 package com.Project.ElectNotify.repository;
 
+
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-import com.Project.ElectNotify.Entity.Voter;
+import com.Project.ElectNotify.entity.Booth;
+import com.Project.ElectNotify.entity.Voter;
 
-public interface VoterRepository extends JpaRepository<Voter, Long> {
-	List<Voter> findByVotedFalse();
+public interface VoterRepository extends JpaRepository<Voter, Integer> {
+	List<Voter> findByBooth(Booth booth);
 	
-	long countByVotedTrue();
+	long countByBooth(Booth booth);
 
-    long countByVotedFalse();
+	long countByBoothAndVoted(Booth booth, boolean voted);
+	
+	List<Voter> findByVotedFalse();
+	List<Voter> findByBoothAndVotedFalse(Booth booth);
 
-    @Query("SELECT v.boothId, COUNT(v) FROM Booth v GROUP BY v.boothId")
-    List<Object[]> countVotersGroupByBooth();
-
-    List<Voter> findByBooth_BoothId(int boothId);
-
-    long countByBooth_BoothId(int boothId);
-
-    long countByBooth_BoothIdAndVotedTrue(int boothId);
-    
-    Optional<Voter> findByVoterIdAndBooth_BoothId(Long voterId, int boothId);
+	int countByBoothBoothId(int boothId);
+	
+    long countByBoothBoothIdAndVotedTrue(int boothId);
 }

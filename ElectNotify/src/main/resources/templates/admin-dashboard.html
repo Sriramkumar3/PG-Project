@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<title>ElectNotify Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#eef1f5;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:220px;
+height:100vh;
+background:#2c3e50;
+color:white;
+position:fixed;
+}
+
+.sidebar h2{
+text-align:center;
+padding:20px;
+border-bottom:1px solid #444;
+}
+
+.sidebar a{
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+}
+
+.sidebar a:hover{
+background:#34495e;
+}
+
+/* Main */
+
+.main{
+margin-left:220px;
+padding:20px;
+}
+
+/* Cards */
+
+.cards{
+display:flex;
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+flex:1;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card h3{
+margin:0;
+color:#555;
+}
+
+.card h1{
+margin-top:10px;
+color:#3498db;
+}
+
+/* Table */
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+th{
+background:#3498db;
+color:white;
+padding:12px;
+}
+
+td{
+padding:10px;
+text-align:center;
+border-bottom:1px solid #eee;
+}
+
+tr:hover{
+background:#f9f9f9;
+}
+
+/* progress bar */
+
+.progress{
+width:100%;
+background:#ddd;
+height:18px;
+border-radius:10px;
+}
+
+.progress-bar{
+height:18px;
+background:#2ecc71;
+border-radius:10px;
+}
+
+.chart-box{
+background:white;
+padding:20px;
+margin-top:30px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>ElectNotify</h2>
+
+<a href="#">Dashboard</a>
+<a href="/admin/voters/allvoters">Voters</a>
+<a href="/admin/booth">Booths</a>
+<a href="/admin/booth-comparison" class="btn btn-info">
+Booth Comparison
+</a>
+<a href="/admin/sendNotification">Send Notification</a>
+<a href="/admin/add-user" class="btn btn-success">
+Add BLO User
+</a>
+<a href="/logout">Logout</a>
+
+</div>
+
+<div class="main">
+
+<h1>Admin Dashboard</h1>
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Booths</h3>
+<h1 th:text="${booths.size()}"></h1>
+</div>
+
+<div class="card">
+<h3>Total Voters</h3>
+<h1 th:text="${totalVoters}"></h1>
+</div>
+
+<div class="card">
+<h3>Total Voted</h3>
+<h1 th:text="${votedCount}"></h1>
+</div>
+
+<div class="card">
+<h3>Voting %</h3>
+<h1 th:text="${percentage} + '%'"></h1>
+</div>
+
+</div>
+
+<h2>Booth Status</h2>
+
+<table>
+
+<tr>
+<th>Booth</th>
+<th>Village</th>
+<th>Total Voters</th>
+<th>Progress</th>
+</tr>
+
+<tr th:each="booth : ${booths}">
+
+<td th:text="${booth.boothId}"></td>
+<td th:text="${booth.Village}"></td>
+<td th:text="${booth.totalVoter}"></td>
+
+<td>
+
+<div class="progress">
+
+<div class="progress-bar"
+th:style="'width:' + ${(booth.totalVoter/2)} + '%'">
+
+</div>
+
+</div>
+
+</td>
+
+</tr>
+
+</table>
+
+<!-- Booth Comparison Chart -->
+
+<div class="chart-box">
+
+<h2>Booth Comparison</h2>
+
+<canvas id="boothChart"></canvas>
+
+</div>
+
+</div>
+
+<script>
+
+const ctx = document.getElementById('boothChart');
+
+new Chart(ctx, {
+
+type: 'bar',
+
+data: {
+
+labels: ['Booth 1','Booth 2','Booth 3','Booth 4'],
+
+datasets: [{
+
+label: 'Voting Percentage',
+
+data: [65,80,45,90],
+
+borderWidth:1
+
+}]
+
+},
+
+options: {
+
+scales: {
+
+y: {
+
+beginAtZero:true
+
+}
+
+}
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

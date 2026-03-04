@@ -1,7 +1,8 @@
-package com.Project.ElectNotify.Entity;
+package com.Project.ElectNotify.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,12 +17,13 @@ public class Voter {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int sno;
 	private String voterName;
+	@Column(unique = true)
 	private String aadhaarNo;
 	private Long voterId;
 	private LocalDate dob;
 	private String email;
 	private String phoneNumber;
-	private boolean voted = false;
+	private boolean voted;
 	@JoinColumn(name = "boothId")
 	@ManyToOne
 	private Booth booth;

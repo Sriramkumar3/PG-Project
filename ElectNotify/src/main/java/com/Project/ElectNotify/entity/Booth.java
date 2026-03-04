@@ -1,9 +1,12 @@
-package com.Project.ElectNotify.Entity;
+package com.Project.ElectNotify.entity;
+
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Booth {
@@ -16,6 +19,13 @@ public class Booth {
 	private String constituency;
 	private String bloName;
 	private String bloNumber;
+	
+	@OneToMany(mappedBy = "booth")
+    private List<Voter> voters;
+
+    @OneToMany(mappedBy = "booth")
+    private List<User> users;
+    
 	public int getBoothId() {
 		return boothId;
 	}

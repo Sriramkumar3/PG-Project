@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Booth Statistics</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .progress {
+            background-color: #ddd;
+            border-radius: 15px;
+        }
+        .bar {
+            height: 20px;
+            background-color: green;
+            border-radius: 15px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Admin Booth Voting Statistics</h2>
+
+<table>
+    <tr>
+        <th>Booth</th>
+        <th>Total</th>
+        <th>Voted</th>
+        <th>Remaining</th>
+        <th>Progress</th>
+    </tr>
+
+    <tr th:each="s : ${statsList}">
+        <td th:text="${s.village}"></td>
+        <td th:text="${s.total}"></td>
+        <td th:text="${s.voted}"></td>
+        <td th:text="${s.remaining}"></td>
+        <td>
+            <div class="progress">
+                <div class="bar"
+                     th:style="'width:' + ${s.percentage} + '%;'"
+                     th:text="${s.percentage} + '%'">
+                </div>
+            </div>
+        </td>
+    </tr>
+
+</table>
+
+<br>
+<a href="/admin/dashboard">Back</a>
+
+</body>
+</html>
